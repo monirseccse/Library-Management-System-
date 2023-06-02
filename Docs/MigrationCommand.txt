@@ -1,0 +1,1 @@
+dotnet ef migrations add IdentityInitial -p Infrastructure -s LibrarayManagement.API -c AppIdentityDbContext -o Identity/Migrations
