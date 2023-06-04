@@ -4,6 +4,7 @@ using Ecommerce.API.Helper;
 using Ecommerce.API.Middleware;
 using Infrastructure.DbContexts;
 using Infrastructure.Identity;
+using Infrastructure.Profiles;
 using LibrarayManagement.API.Extensions;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -28,11 +29,10 @@ try
     {
         options.UseSqlServer(identityConstring, m => m.MigrationsAssembly(assemblyName));
     });
-
     builder.Services.AddApplicationServices();
     builder.Services.AddIdentityServices(builder);
     
-    builder.Services.AddAutoMapper(typeof(MappingProfile));
+    builder.Services.AddAutoMapper(typeof(InfrastructureProfile));
     // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
     builder.Services.AddEndpointsApiExplorer();
     builder.Services.AddSwaggerGen();

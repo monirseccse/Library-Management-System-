@@ -4,6 +4,9 @@ using Infrastructure.Repositories;
 using Microsoft.AspNetCore.Mvc;
 using Core.Interfaces;
 using Infrastructure.Services;
+using Infrastructure.UnitOfWorks;
+using Infrastructure.UnitOfWorks;
+using Infrastructure.DbContexts;
 
 namespace Ecommerce.API.Extensions
 {
@@ -12,6 +15,12 @@ namespace Ecommerce.API.Extensions
         public static IServiceCollection AddApplicationServices(this IServiceCollection services)
         {
             services.AddScoped<ITokenService, TokenService>();
+            services.AddScoped<IApplicationDbContext,ApplicationDbContext>();
+            services.AddScoped<IApplicationUnitOfWork, ApplicationUnitOfWork>();
+            services.AddScoped<IBookService, BookService>();
+            services.AddScoped<IBookRepository, BookRepository>();
+            
+            services.AddScoped<IStudentRepository, StudentRepository>();
             services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
 
             services.Configure<ApiBehaviorOptions>(options =>
