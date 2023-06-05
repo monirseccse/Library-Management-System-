@@ -23,6 +23,7 @@ namespace Infrastructure.Repositories
         public async Task AddAsync(TEntity entity)
         {
             await _dbSet.AddAsync(entity);
+           // await _dbContext.SaveChangesAsync();
         }
 
         public async Task<IReadOnlyList<TEntity>> GetAllAsync()

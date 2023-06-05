@@ -7,7 +7,7 @@ namespace Infrastructure.UnitOfWorks
     public class ApplicationUnitOfWork : UnitOfWork, IApplicationUnitOfWork
     {
         public ApplicationUnitOfWork(
-            ApplicationDbContext dbContext,
+            IApplicationDbContext dbContext,
             IBookRepository bookRepository,
             IStudentRepository studentRepository) : base((DbContext)dbContext)
         {

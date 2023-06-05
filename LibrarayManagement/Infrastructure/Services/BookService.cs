@@ -46,7 +46,7 @@ public class BookService : IBookService
         if(entity is not null)
         {
             entity = _mapper.Map(book,entity);
-            _applicationUnitofwork.Book.EditAsync(entity);
+            await _applicationUnitofwork.SaveAsync();
         }
         else
         {
