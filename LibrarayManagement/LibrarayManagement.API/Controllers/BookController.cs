@@ -88,18 +88,7 @@ namespace LibrarayManagement.API.Controllers
         [HttpPost("issueBook")]
         public IActionResult IssueBook(int studentId, int bookId)
         {
-            var student = _studentService.GetStudent(studentId);
-            var book = _bookService.GetBook(bookId);
-
-            if(book is null || student is null)
-            {
-                return NotFound();
-            }
-            else
-            {
-
-            }
-
+            _bookService.AddIssue(studentId, bookId);
 
             return Ok();
         }
