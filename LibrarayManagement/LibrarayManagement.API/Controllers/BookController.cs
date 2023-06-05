@@ -57,7 +57,7 @@ namespace LibrarayManagement.API.Controllers
         {
             try
             {
-                var booklist = _bookService.GetBooks();
+                var booklist = await _bookService.GetBooks();
                 return Ok(booklist);
             }
             catch (Exception ex)
@@ -67,7 +67,7 @@ namespace LibrarayManagement.API.Controllers
             }
         }
 
-        [HttpGet("status")]
+        [HttpGet("GetBookbystatus")]
         public async Task<ActionResult<IReadOnlyList<Book>>> GetBooks(string status)
         {
             try
@@ -92,6 +92,14 @@ namespace LibrarayManagement.API.Controllers
 
             return Ok();
         }
-    
-}
+
+        [HttpPost("returnBook")]
+        public IActionResult ReturnBook(int studentId, int bookId)
+        {
+            _bookService.AddIssue(studentId, bookId);
+
+            return Ok();
+        }
+
+    }
 }

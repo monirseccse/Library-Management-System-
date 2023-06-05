@@ -66,14 +66,13 @@ public class BookService : IBookService
     {
         Enum.TryParse<IssueStatus>(status, out IssueStatus result);
 
-        var issuelist = await _applicationUnitofwork.
-             StudentAndBookIssueReturnDetails.GetAsync(x => x.IssueStatus.Equals(result), "Book");
+        var booklist = await _applicationUnitofwork.
+             Book.GetAsync(x => x.Status.Equals(result));
 
-        if(issuelist is not null)
+        if(booklist is not null)
         {
-            var bookentity = issuelist.Select(x => x.Book).ToList();
             var booklitBo = _mapper.Map<IList<BookEo>, IList<BookBo>>
-                (bookentity);
+                (booklist);
 
             return booklitBo;
         }
@@ -99,6 +98,38 @@ public class BookService : IBookService
         }
     }
 
+
+    public async Task ReturnBook(int studentId, int bookId)
+    {
+        var bookEo = await _applicationUnitofwork.Book.GetByIdAsync(bookId);
+        var studentEo = await _applicationUnitofwork.Student.GetByIdAsync(studentId);
+
+        if (studentEo is null || bookEo is null)
+        {
+            throw new InvalidOperationException("Book Or Student Id Invalid");
+        }
+
+        var studentissueDetail = await _applicationUnitofwork.StudentAndBookIssueReturnDetails
+            .GetAsync(x => x.StudentId == studentId && x.BookId == bookId
+            && x.IssueStatus == IssueStatus.Issue);
+
+        if(studentissueDetail is null)
+        {
+            throw new InvalidOperationException("Nothing found to return");
+        }
+
+        var detail = studentissueDetail.LastOrDefault();
+        detail.IssueStatus = IssueStatus.Free;
+
+       _applicationUnitofwork.StudentAndBookIssueReturnDetails.EditAsync(detail);
+       await _applicationUnitofwork.SaveAsync();
+
+        bookEo.Status = IssueStatus.Free;
+
+        await _applicationUnitofwork.SaveAsync();
+
+    }
+
     public async Task AddIssue(int studentId, int bookId)
     {
         var bookEo =    await _applicationUnitofwork.Book.GetByIdAsync(bookId);
@@ -117,9 +148,9 @@ public class BookService : IBookService
 
         var totalStudentOccupiedbook = studentissueDetail.Where
             (x => x.StudentId == studentId && 
-            x.IssueStatus.ToString() == IssueStatus.Issue.ToString()).Count();
+            x.IssueStatus == IssueStatus.Issue).Count();
 
-        if (bookEo.Issues.ToString() == IssueStatus.Free.ToString() && bookcount < 2 && totalStudentOccupiedbook < 4)
+        if (bookEo.Status == IssueStatus.Free && bookcount < 2 && totalStudentOccupiedbook < 4)
         {
             StudenBookIssueAndReturnDetailEo entity = new StudenBookIssueAndReturnDetailEo();
             entity.BookId = bookId;
@@ -128,6 +159,10 @@ public class BookService : IBookService
             entity.IssueStatus = IssueStatus.Issue;
 
             await _applicationUnitofwork.StudentAndBookIssueReturnDetails.AddAsync(entity);
+            await _applicationUnitofwork.SaveAsync();
+
+            bookEo.Status = IssueStatus.Issue;
+
             await _applicationUnitofwork.SaveAsync();
         }
         else

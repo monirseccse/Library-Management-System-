@@ -8,5 +8,6 @@ public class Book : BaseEntity
     public string Title { get; set; }
     public double Price { get; set; }
     public string Author { get; set; }
+    public IssueStatus Status { get; set; } = IssueStatus.Free;
     public List<StudenBookIssueAndReturnDetail> Issues { get; set; }
 }

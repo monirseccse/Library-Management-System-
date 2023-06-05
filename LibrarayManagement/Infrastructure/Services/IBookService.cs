@@ -13,6 +13,6 @@ public interface IBookService
     public Task<IReadOnlyList<BookBo>>GetBooks();
     public Task<IList<BookBo>> GetBooks(string status);
     public Task<BookBo> GetBook(int id);
-    public Task AddIssue
-        (int studentId, int bookId);
+    public Task AddIssue(int studentId, int bookId);
+    public Task ReturnBook(int studentId, int bookId);
 }
