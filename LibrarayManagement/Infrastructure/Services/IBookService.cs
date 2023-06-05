@@ -9,5 +9,6 @@ public interface IBookService
     public Task AddBook(BookBo book);
     public Task UpdateBook(BookEdit book);
     public Task<IReadOnlyList<BookBo>>GetBooks();
-    public Task<IReadOnlyList<StudenBookIssueAndReturnDetail>> GetBooks(string status);
+    public Task<IList<BookBo>> GetBooks(string status);
+    public Task<BookBo> GetBook(int id);
 }

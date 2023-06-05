@@ -28,6 +28,22 @@ public class StudentService : IStudentService
         await _applicationUnitofwork.SaveAsync();
     }
 
+    public async Task<StudentBo> GetStudent(int id)
+    {
+        var entity = await _applicationUnitofwork.Student.GetByIdAsync(id);
+
+        if(entity is not null)
+        {
+            var student = _mapper.Map<StudentEo,StudentBo>(entity);
+
+            return student;
+        }
+        else
+        {
+            throw new InvalidOperationException("Student Not found");
+        }
+    }
+
     public Task<IList<StudentBo>> GetStudents()
     {
         throw new NotImplementedException();

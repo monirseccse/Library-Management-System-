@@ -23,6 +23,7 @@ namespace Ecommerce.API.Extensions
             services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
 
             services.AddScoped<IStudentService,StudentService>();
+            services.AddScoped<IStudentAndBookIssueReturnDetailsRepository, StudentAndBookIssueReturnDetailsRepository>();
 
             services.Configure<ApiBehaviorOptions>(options =>
             {

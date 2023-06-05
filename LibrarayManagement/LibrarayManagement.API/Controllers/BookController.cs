@@ -1,4 +1,5 @@
-﻿using Infrastructure.BusinessObjects;
+﻿using AutoMapper;
+using Infrastructure.BusinessObjects;
 using Infrastructure.Services;
 using Microsoft.AspNetCore.Mvc;
 
@@ -9,10 +10,14 @@ namespace LibrarayManagement.API.Controllers
     public class BookController : ControllerBase
     {
         private readonly IBookService _bookService;
+        private readonly IStudentService _studentService;
 
-        public BookController(IBookService bookService)
+        public BookController(
+            IBookService bookService,
+            IStudentService studentService)
         {
             _bookService= bookService;
+            _studentService= studentService;
         }
 
         [HttpPost()]
@@ -67,7 +72,8 @@ namespace LibrarayManagement.API.Controllers
         {
             try
             {
-                var booklist = _bookService.GetBooks();
+                var booklist = await _bookService.GetBooks(status);
+
                 return Ok(booklist);
             }
             catch (Exception ex)
@@ -77,5 +83,26 @@ namespace LibrarayManagement.API.Controllers
             }
 
         }
-    }
+
+
+        [HttpPost("issueBook")]
+        public IActionResult IssueBook(int studentId, int bookId)
+        {
+            var student = _studentService.GetStudent(studentId);
+            var book = _bookService.GetBook(bookId);
+
+            if(book is null || student is null)
+            {
+                return NotFound();
+            }
+            else
+            {
+
+            }
+
+
+            return Ok();
+        }
+    
+}
 }

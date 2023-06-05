@@ -58,7 +58,7 @@ namespace Infrastructure.Repositories
             return Task.FromResult(count);
         }
 
-        public async virtual Task<IReadOnlyList<TEntity>> GetAsync(Expression<Func<TEntity, bool>> filter, string includeProperties = "")
+        public async virtual Task<IList<TEntity>> GetAsync(Expression<Func<TEntity, bool>> filter, string includeProperties = "")
         {
             IQueryable<TEntity> query = _dbSet;
 

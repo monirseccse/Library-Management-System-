@@ -10,6 +10,6 @@ namespace Domain.Repositories
         Task AddAsync(TEntity entity);
         void EditAsync(TEntity entityToUpdate);
         Task<int> GetCount(Expression<Func<TEntity, bool>> filter = null);
-        Task<IReadOnlyList<TEntity>> GetAsync(Expression<Func<TEntity, bool>> filter, string includeProperties = "");
+        Task<IList<TEntity>> GetAsync(Expression<Func<TEntity, bool>> filter, string includeProperties = "");
     }
 }
