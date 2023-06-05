@@ -23,7 +23,6 @@ namespace Infrastructure.Repositories
         public async Task AddAsync(TEntity entity)
         {
             await _dbSet.AddAsync(entity);
-           // await _dbContext.SaveChangesAsync();
         }
 
         public async Task<IReadOnlyList<TEntity>> GetAllAsync()
@@ -57,6 +56,24 @@ namespace Infrastructure.Repositories
 
             count = query.Count();
             return Task.FromResult(count);
+        }
+
+        public async virtual Task<IReadOnlyList<TEntity>> GetAsync(Expression<Func<TEntity, bool>> filter, string includeProperties = "")
+        {
+            IQueryable<TEntity> query = _dbSet;
+
+            if (filter != null)
+            {
+                query = query.Where(filter);
+            }
+
+            foreach (var includeProperty in includeProperties.Split
+                (new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries))
+            {
+                query = query.Include(includeProperty);
+            }
+
+            return await query.ToListAsync();
         }
 
     }

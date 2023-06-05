@@ -9,13 +9,17 @@ namespace Infrastructure.UnitOfWorks
         public ApplicationUnitOfWork(
             IApplicationDbContext dbContext,
             IBookRepository bookRepository,
-            IStudentRepository studentRepository) : base((DbContext)dbContext)
+            IStudentRepository studentRepository,
+            IStudentAndBookIssueReturnDetailsRepository studentAndBookIssueReturnDetailsRepository)
+            : base((DbContext)dbContext)
         {
             Book = bookRepository;
             Student = studentRepository;
+            StudentAndBookIssueReturnDetails = studentAndBookIssueReturnDetailsRepository;
         }
 
         public IBookRepository Book { get; private set; }
         public IStudentRepository Student { get; private set; }
+        public IStudentAndBookIssueReturnDetailsRepository StudentAndBookIssueReturnDetails{ get; private set; }
     }
 }

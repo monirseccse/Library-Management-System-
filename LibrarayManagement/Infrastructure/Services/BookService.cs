@@ -3,6 +3,8 @@ using BookBo =Infrastructure.BusinessObjects.Book;
 using BookEo = Domain.Entities.Book;
 using Infrastructure.UnitOfWorks;
 using Infrastructure.BusinessObjects;
+using Domain.Enum;
+using Domain.Entities;
 
 namespace Infrastructure.Services;
 
@@ -34,9 +36,13 @@ public class BookService : IBookService
          await _applicationUnitofwork.SaveAsync();
     }
 
-    public IList<BookBo> GetBooks()
+    public async Task<IReadOnlyList<BookBo>> GetBooks()
     {
-        throw new NotImplementedException();
+        var booklist = await _applicationUnitofwork.Book.GetAllAsync();
+        var booklitBo = _mapper.Map<IReadOnlyList<BookEo>, IReadOnlyList<BookBo>>
+                (booklist);
+
+        return booklitBo;
     }
 
     public async Task UpdateBook(BookEdit book)
@@ -52,5 +58,16 @@ public class BookService : IBookService
         {
             throw new  InvalidOperationException("Book does not exist");
         }
+    }
+
+    public async Task<IReadOnlyList<StudenBookIssueAndReturnDetail>>GetBooks(string status)
+    {
+        Enum.TryParse<IssueStatus>(status, out IssueStatus result);
+       
+
+        var booklitBo = _mapper.Map<IReadOnlyList<BookEo>, IReadOnlyList<BookBo>>
+                (booklist);
+
+        
     }
 }

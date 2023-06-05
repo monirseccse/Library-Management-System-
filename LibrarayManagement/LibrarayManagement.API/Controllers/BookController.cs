@@ -46,5 +46,36 @@ namespace LibrarayManagement.API.Controllers
                 return BadRequest();
             }
         }
+
+        [HttpGet()]
+        public async Task<ActionResult<IReadOnlyList<Book>>>GetBooks()
+        {
+            try
+            {
+                var booklist = _bookService.GetBooks();
+                return Ok(booklist);
+            }
+            catch (Exception ex)
+            {
+
+                return BadRequest();
+            }
+        }
+
+        [HttpGet("status")]
+        public async Task<ActionResult<IReadOnlyList<Book>>> GetBooks(string status)
+        {
+            try
+            {
+                var booklist = _bookService.GetBooks();
+                return Ok(booklist);
+            }
+            catch (Exception ex)
+            {
+
+                return BadRequest();
+            }
+
+        }
     }
 }
