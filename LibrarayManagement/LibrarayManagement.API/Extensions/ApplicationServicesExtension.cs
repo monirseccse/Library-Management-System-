@@ -19,9 +19,10 @@ namespace Ecommerce.API.Extensions
             services.AddScoped<IApplicationUnitOfWork, ApplicationUnitOfWork>();
             services.AddScoped<IBookService, BookService>();
             services.AddScoped<IBookRepository, BookRepository>();
-            
             services.AddScoped<IStudentRepository, StudentRepository>();
             services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
+
+            services.AddScoped<IStudentService,StudentService>();
 
             services.Configure<ApiBehaviorOptions>(options =>
             {

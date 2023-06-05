@@ -34,7 +34,7 @@ public class BookService : IBookService
          await _applicationUnitofwork.SaveAsync();
     }
 
-    public IList<BookBo> GetBooks(BookBo book)
+    public IList<BookBo> GetBooks()
     {
         throw new NotImplementedException();
     }
