@@ -26,12 +26,12 @@ namespace LibrarayManagement.API.Controllers
             try
             {
                 await  _bookService.AddBook(model);
-                return Ok();
+                return Ok("saved successfully");
             }
             catch (Exception ex)
             {
 
-                return BadRequest();
+                return BadRequest(ex.Message);
             }
         }
 
@@ -42,13 +42,13 @@ namespace LibrarayManagement.API.Controllers
             {
                 await _bookService.UpdateBook(model);
 
-                return Ok();
+                return Ok("updated successfully");
 
             }
             catch (Exception ex)
             {
 
-                return BadRequest();
+                return BadRequest(ex.Message);
             }
         }
 
@@ -63,7 +63,7 @@ namespace LibrarayManagement.API.Controllers
             catch (Exception ex)
             {
 
-                return BadRequest();
+                return BadRequest(ex.Message);
             }
         }
 
@@ -79,7 +79,7 @@ namespace LibrarayManagement.API.Controllers
             catch (Exception ex)
             {
 
-                return BadRequest();
+                return BadRequest(ex.Message);
             }
 
         }
@@ -92,12 +92,12 @@ namespace LibrarayManagement.API.Controllers
             {
                 await _bookService.AddIssue(studentId, bookId);
 
-                return Ok();
+                return Ok("issued successfully");
             }
             catch (Exception ex)
             {
 
-                return BadRequest();
+                return BadRequest(ex.Message);
             }
         }
 
@@ -108,12 +108,12 @@ namespace LibrarayManagement.API.Controllers
             {
                 await _bookService.ReturnBook(studentId, bookId);
 
-                return Ok();
+                return Ok("returned sucessfully");
             }
             catch (Exception ex)
             {
 
-                throw;
+                return BadRequest(ex.Message);
             }
         }
 

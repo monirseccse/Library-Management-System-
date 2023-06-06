@@ -22,12 +22,12 @@ namespace LibrarayManagement.API.Controllers
             try
             {
                 await _studentService.AddStudent(model);
-                return Ok();
+                return Ok("saved successfully");
             }
-            catch (Exception)
+            catch (Exception ex)
             {
 
-                return BadRequest();
+                return BadRequest(ex.Message);
             }
         }
 
@@ -38,13 +38,13 @@ namespace LibrarayManagement.API.Controllers
             {
                 await _studentService.UpdateStudent(model);
 
-                return Ok();
+                return Ok("updated successfully");
 
             }
-            catch (Exception)
+            catch (Exception ex)
             {
 
-                return BadRequest();
+                return BadRequest(ex.Message);
             }
         }
     }

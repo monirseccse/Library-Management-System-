@@ -145,7 +145,8 @@ public class BookService : IBookService
                 .GetAsync(x => x.StudentId == studentId);
 
             var bookcount = studentissueDetail.Where(x => x.StudentId == studentId &&
-                 x.IssueDate.GetValueOrDefault().Date == DateTime.Now.Date).Count();
+                 x.IssueDate.GetValueOrDefault().Date == DateTime.Now.Date
+                 && x.IssueStatus == IssueStatus.Issue).Count();
 
             var totalStudentOccupiedbook = studentissueDetail.Where
                 (x => x.StudentId == studentId &&
