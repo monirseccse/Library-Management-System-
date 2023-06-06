@@ -11,11 +11,9 @@ namespace Infrastructure.Repositories
     {
         protected DbContext _dbContext;
         protected DbSet<TEntity> _dbSet;
-        protected int CommandTimeout { get; set; }
 
         public Repository(DbContext context)
         {
-            CommandTimeout = 300;
             _dbContext = context;
             _dbSet = _dbContext.Set<TEntity>();
         }
@@ -27,12 +25,12 @@ namespace Infrastructure.Repositories
 
         public async Task<IReadOnlyList<TEntity>> GetAllAsync()
         {
-            return await _dbContext.Set<TEntity>().ToListAsync();
+            return await _dbSet.ToListAsync();
         }
 
         public async Task<TEntity> GetByIdAsync(int id)
         {
-            return await _dbContext.Set<TEntity>().FindAsync(id);
+            return await _dbSet.FindAsync(id);
         }
 
         public virtual  void EditAsync(TEntity entityToUpdate)
@@ -41,10 +39,11 @@ namespace Infrastructure.Repositories
             {
                 _dbSet.Attach(entityToUpdate);
             }
+
             _dbContext.Entry(entityToUpdate).State = EntityState.Modified;
         }
 
-        public virtual Task<int> GetCount(Expression<Func<TEntity, bool>> filter = null)
+        public async virtual Task<int> GetCount(Expression<Func<TEntity, bool>> filter = null)
         {
             IQueryable<TEntity> query = _dbSet;
             var count = 0;
@@ -54,26 +53,27 @@ namespace Infrastructure.Repositories
                 query = query.Where(filter);
             }
 
-            count = query.Count();
-            return Task.FromResult(count);
+
+            return await query.CountAsync();
         }
 
         public async virtual Task<IList<TEntity>> GetAsync(Expression<Func<TEntity, bool>> filter, string includeProperties = "")
         {
-            IQueryable<TEntity> query = _dbSet;
+                IQueryable<TEntity> query = _dbSet;
 
-            if (filter != null)
-            {
-                query = query.Where(filter);
-            }
+                if (filter != null)
+                {
+                    query = query.Where(filter);
+                }
 
-            foreach (var includeProperty in includeProperties.Split
-                (new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries))
-            {
-                query = query.Include(includeProperty);
-            }
+                foreach (var includeProperty in includeProperties.Split
+                    (new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries))
+                {
+                    query = query.Include(includeProperty);
+                }
 
-            return await query.ToListAsync();
+                return await query.ToListAsync();
+           
         }
 
     }

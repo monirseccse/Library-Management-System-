@@ -120,6 +120,7 @@ public class BookService : IBookService
 
         var detail = studentissueDetail.LastOrDefault();
         detail.IssueStatus = IssueStatus.Free;
+        detail.ReturnDate = DateTime.Now;
 
        _applicationUnitofwork.StudentAndBookIssueReturnDetails.EditAsync(detail);
        await _applicationUnitofwork.SaveAsync();
@@ -132,23 +133,23 @@ public class BookService : IBookService
 
     public async Task AddIssue(int studentId, int bookId)
     {
-        var bookEo =    await _applicationUnitofwork.Book.GetByIdAsync(bookId);
+        var bookEo = await _applicationUnitofwork.Book.GetByIdAsync(bookId);
         var studentEo = await _applicationUnitofwork.Student.GetByIdAsync(studentId);
 
-        if(studentEo is  null || bookEo is null) 
+        if (studentEo is null || bookEo is null)
         {
             throw new InvalidOperationException("Book Or Student Id Invalid");
         }
 
         var studentissueDetail = await _applicationUnitofwork.StudentAndBookIssueReturnDetails
-            .GetAsync(x=>x.StudentId == studentId);
+                .GetAsync(x => x.StudentId == studentId);
 
-        var bookcount = studentissueDetail.Where(x => x.StudentId == studentId &&
-             x.IssueDate == DateTime.Now).Count();
+            var bookcount = studentissueDetail.Where(x => x.StudentId == studentId &&
+                 x.IssueDate.GetValueOrDefault().Date == DateTime.Now.Date).Count();
 
-        var totalStudentOccupiedbook = studentissueDetail.Where
-            (x => x.StudentId == studentId && 
-            x.IssueStatus == IssueStatus.Issue).Count();
+            var totalStudentOccupiedbook = studentissueDetail.Where
+                (x => x.StudentId == studentId &&
+                x.IssueStatus == IssueStatus.Issue).Count();
 
         if (bookEo.Status == IssueStatus.Free && bookcount < 2 && totalStudentOccupiedbook < 4)
         {
@@ -169,5 +170,6 @@ public class BookService : IBookService
         {
             throw new InvalidOperationException("Validation Failed");
         }
+
     }
 }

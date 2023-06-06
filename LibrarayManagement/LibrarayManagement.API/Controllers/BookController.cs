@@ -28,7 +28,7 @@ namespace LibrarayManagement.API.Controllers
                 await  _bookService.AddBook(model);
                 return Ok();
             }
-            catch (Exception)
+            catch (Exception ex)
             {
 
                 return BadRequest();
@@ -45,7 +45,7 @@ namespace LibrarayManagement.API.Controllers
                 return Ok();
 
             }
-            catch (Exception)
+            catch (Exception ex)
             {
 
                 return BadRequest();
@@ -86,19 +86,35 @@ namespace LibrarayManagement.API.Controllers
 
 
         [HttpPost("issueBook")]
-        public IActionResult IssueBook(int studentId, int bookId)
+        public async Task<ActionResult> IssueBook(int studentId, int bookId)
         {
-            _bookService.AddIssue(studentId, bookId);
+            try
+            {
+                await _bookService.AddIssue(studentId, bookId);
 
-            return Ok();
+                return Ok();
+            }
+            catch (Exception ex)
+            {
+
+                return BadRequest();
+            }
         }
 
         [HttpPost("returnBook")]
-        public IActionResult ReturnBook(int studentId, int bookId)
+        public async Task<ActionResult> ReturnBook(int studentId, int bookId)
         {
-            _bookService.AddIssue(studentId, bookId);
+            try
+            {
+                await _bookService.ReturnBook(studentId, bookId);
 
-            return Ok();
+                return Ok();
+            }
+            catch (Exception ex)
+            {
+
+                throw;
+            }
         }
 
     }
